@@ -1,30 +1,31 @@
 const express = require('express');
-const path = require('path');
+
 const app = express();
 
+const middleWare = (req,resp,next)=>{
+    if(!req.query.age){
+        resp.end('Please Enter Your Age');
+    }
+    else if(req.query.age<18){
+        resp.end('Age Should be greater than 18');
+    }
+    else{
+        next();
+    }
+}
 
+app.use(middleWare);
 
-const dirName = path.join(__dirname,'StaticPage');
-app.use(express.static(dirName));
-
-app.get('/',(_,resp)=>{
-    resp.sendFile(path.join(dirName,'index.html'));
-    
+app.get('/',(req , resp)=>{
+        resp.send('Welcome FocusTeck');
+        resp.end();
 });
 
-
-app.get('/about',(_,resp)=>{
-
-    resp.sendFile(path.join(dirName,'About.html'));
-
-});
-
-app.get('*' , (req , resp)=>{
-    resp.sendFile(path.join(dirName,'404Page.html'));
-
-
+app.get('/about',(req , resp)=>{
+    resp.send('About FocusTeck');
+    resp.end();
 });
 
 app.listen(5000,()=>{
-    console.log("Server is Running......")
+    console.log('server is running successfully......');
 });
